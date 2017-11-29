@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	>
+	
+	
+	<ui:define name="metadata">
+		<f:metadata>
+		<f:event listener="#{MBCliente.carregarCadastro}" type="preRenderView"/>
+		</f:metadata>
+		
+	</ui:define>
+	
+	
+	<ui:define name="conteudo">
+		<h:form id="formularioCadastroCliente">
+		<p:toolbar>
+			<f:facet name="left">
+			<h:outputText value="Clientes"/>
+			</f:facet>
+		</p:toolbar>
+		<h:panelGrid columns="2" id="painelCadastroCliente">
+		<p:outputLabel value="Código: "/>
+		<p:inputText maxlength="50" size="100" readonly="true" value="#{MBCliente.cliente.codigo}"/>
+		<p:outputLabel value="Nome: " readonly="#{MBCliente.excluir}"/>
+		<p:inputText maxlength="100" size="100" value="#{MBCliente.cliente.nome}"/>
+		<p:outputLabel value="CPF: "/>
+		<p:inputMask mask="999.999.999-99" maxlength="100" size="100"/>
+		<p:outputLabel value="Endereço: "/>
+		<p:inputText maxlength="200" size="100"/>
+		<p:outputLabel value="Telefone: "/>
+		<p:inputMask mask="(99) 9999-9999" maxlength="20" size="100"/>
+		<p:outputLabel value="Status: "/>
+		<p:selectOneButton>
+			<f:selectItem itemLabel="Bom"/>
+			<f:selectItem itemLabel="Médio"/>
+			<f:selectItem itemLabel="Ruim"/>
+		</p:selectOneButton>
+		<p:outputLabel value="Limite: "/>
+		<p:inputText maxlength="30" size="100"/>
+		
+		</h:panelGrid>
+		<h:panelGrid columns="5">
+		<p:button icon="ui-icon-arrowreturnthick-1-w" outcome="/pages/clientePesquisa.xhtml"/>
+		<p:button icon="ui-icon-plus" outcome="/pages/clienteCadastro.xhtml" actionListener="#{MBCliente.novo}" update=":formularioCadastroCliente:painelCadastroCliente" rendered="#{MBCliente.acao == 'Novo'}"/>
+		<p:commandButton icon="ui-icon-disk" actionListener="#{MBCliente.salvar}" update=":msgGlobal :formularioCadastroCliente:painelCadastroCliente"/>
+		<p:commandButton icon="ui-icon-pencil" actionListener="#{MBCliente.editar}" update=":msgGlobal" rendered="#MBCliente.acao == 'Editar'}"/>
+		<p:commandButton icon="ui-icon-trash" actionListener="#{MBCliente.excluir}" update=":msgGlobal" rendered="#MBCliente.acao == 'Excluir'}"/>
+		</h:panelGrid>
+		</h:form>		
+	
+	</ui:define>
+	
+	</ui:composition>

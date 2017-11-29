@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	>
+	
+		<ui:define name="metadata">
+		<f:metadata>
+		<f:viewParam name="foracao" value="#{MBProduto.acao}"/>
+		<f:viewParam name="forcod" value="#{MBProduto.codigo}"/>
+		<f:event listener="#{MBProduto.carregarCadastro}" type="preRenderView"/>
+		</f:metadata>
+		
+	</ui:define>
+	
+	
+	<ui:define name="conteudo">
+		<h:form id="formularioCadastroProduto">
+		<p:toolbar>
+			<f:facet name="left">
+			<h:outputText value="Produtos"/>
+			</f:facet>
+		</p:toolbar>
+		<h:panelGrid columns="2" id="painelCadastroProduto">
+		
+		<p:outputLabel value="Código: "/>
+		<p:inputText maxlength="50" size="100" readonly="true" value="#{MBProduto.produto.codigo}"/>
+		<p:outputLabel value="Nome: " readonly="#{MBProduto.excluir}"/>
+		<p:inputText maxlength="100" size="100" value="#{MBProduto.produto.nome}">
+			<f:validateBean/>
+		</p:inputText>
+		<p:outputLabel value="Preço: "/>
+		<p:inputText maxlength="200" size="100">
+			<f:validateBean/>
+		</p:inputText>
+		<p:outputLabel value="Quantidade disponível: "/>
+		<p:inputText maxlength="20" size="100">
+			<f:validateBean/>
+		</p:inputText>
+		<p:outputLabel for="botaoMoeda" value="Moeda: " />
+        <p:selectOneButton id="botaoMoeda">
+        	<f:validateBean/>
+            <f:selectItem itemLabel="Real" itemValue="Real" />
+            <f:selectItem itemLabel="Dólar" itemValue="Dólar" />
+        </p:selectOneButton>
+		<p:outputLabel value="Imposto: "/>
+		<p:inputText maxlength="1" size="100">
+		<f:validateBean/>
+		</p:inputText>
+
+	
+		</h:panelGrid>
+		<h:panelGrid columns="5">
+		<p:button icon="ui-icon-arrowreturnthick-1-w" outcome="/pages/produtoPesquisa.xhtml"/>
+		<p:button icon="ui-icon-plus" outcome="/pages/produtoCadastro.xhtml" actionListener="#{MBProduto.novo}" update=":formularioCadastroProduto:painelCadastroProduto" rendered="#{MBProduto.acao == 'Novo'}"/>
+		<p:commandButton icon="ui-icon-disk" actionListener="#{MBProduto.salvar}" update=":msgGlobal :formularioCadastroProduto:painelCadastroProduto"/>
+		<p:commandButton icon="ui-icon-pencil" actionListener="#{MBProduto.editar}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Editar'}"/>
+		<p:commandButton icon="ui-icon-trash" actionListener="#{MBProduto.excluir}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Excluir'}"/>
+		</h:panelGrid>
+		</h:form>		
+	
+	</ui:define>
+	
+	</ui:composition>

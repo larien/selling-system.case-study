@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/vendas</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">1234</property>
+
+        <!-- Config da conexao JDBC MySQL -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+
+        <!-- Gerenciamento da sessao MySQL -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Desabilita o cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+        <!-- Exibe os comandos SQL -->
+        <property name="show_sql">true</property>
+
+        <!-- Atualização e criação das tabelas -->
+        <property name="hbm2ddl.auto">validate</property>
+
+		<mapping class="br.facens.Vendas.devit.Cliente"/>
+		<mapping class="br.facens.Vendas.devit.Categoria"/>
+		<mapping class="br.facens.Vendas.devit.ItemPedido"/>
+		<mapping class="br.facens.Vendas.devit.Pedido"/>
+		<mapping class="br.facens.Vendas.devit.Produto"/>
+		<mapping class="br.facens.Vendas.devit.ProdutoExportacao"/>
+		<mapping class="br.facens.Vendas.devit.ProdutoMercadoInterno"/>
+
+    </session-factory>
+
+</hibernate-configuration>
