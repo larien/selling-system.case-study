@@ -1,5 +1,6 @@
 package br.facens.Vendas.Bean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.faces.bean.ManagedBean;
@@ -195,12 +196,51 @@ public void excluir() {
 }
 
 public void adicionar(Produto produto) {
+	
 	ItemPedido item = new ItemPedido();
-	item.setProduto(produto);
+	item.setProduto(produto);	
+	
+	
+	int found = -1;
+	
+	for(int pos = 0; pos<itens.size() && found < 0;pos++) {
+		ItemPedido temp = itens.get(pos);
+		
+		if(temp.getProduto().equals(produto)) {
+			found = pos;
+		}
+	}
+	
+	if (found < 0) {
 	item.setQuantidade(1);
 	item.setValorParcial(produto.getPreco());
 	itens.add(item);
+	}else {
+		ItemPedido temp = itens.get(found);
+		item.setQuantidade(temp.getQuantidade() + 1);
+		item.setValorParcial(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
+		itens.set(found,  item);
+	}
 }
 
+public void remover(ItemPedido item) {
+	int found = -1;
+	
+	for(int pos = 0; pos<itens.size() && found < 0;pos++) {
+		ItemPedido temp = itens.get(pos);
+		
+		if(temp.getProduto().equals(item.getProduto())) {
+			found = pos;
+		}
+		
+		if (found > -1) {
+			item.setQuantidade(temp.getQuantidade() - 1);
+		}
+		
+		if (temp.getQuantidade() <= 0) {
+			itens.remove(found);
+		}
+	}
+}
 
 }

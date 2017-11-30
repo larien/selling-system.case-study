@@ -16,24 +16,16 @@ public class ClienteBean {
 	private ArrayList<Cliente>clientesFiltrados;
 	private String acao;
 	
-	public String getAcao() {
-		return acao;
-	}
-	
-	public void setAcao(String acao) {
-		this.acao = acao;
-	}
 
-public Cliente getCliente() {
-	
-	return cliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
-public ArrayList<Cliente> getClientes() {
+	public ArrayList<Cliente> getClientes() {
 		return clientes;
 	}
 
@@ -45,8 +37,16 @@ public ArrayList<Cliente> getClientes() {
 		return clientesFiltrados;
 	}
 
-	public void setListarFiltrados(ArrayList<Cliente> clientesFiltrados) {
+	public void setClientesFiltrados(ArrayList<Cliente> clientesFiltrados) {
 		this.clientesFiltrados = clientesFiltrados;
+	}
+
+	public String getAcao() {
+		return acao;
+	}
+
+	public void setAcao(String acao) {
+		this.acao = acao;
 	}
 
 	public void prepararPesquisa() {

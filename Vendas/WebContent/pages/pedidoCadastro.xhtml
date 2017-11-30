@@ -15,7 +15,7 @@
 	</ui:define>
 	
 	<ui:define name="conteudo">
-		<h:form id="formularioProdutosCarrinho">
+		<h:form>
 		<p:toolbar>
 			<f:facet name="left">
 			<h:outputText value="Produtos"/>
@@ -52,28 +52,29 @@
 		<p:column headerText="Adicionar">
 			<p:commandButton icon="ui-icon-circle-plus"
 			actionListener="#{MBPedido.adicionar(produto)}"
-			update=":formularioProdutosCarrinho:tabelaItens"
+			update=":formcad:tbItens"
 			/>
 		</p:column>
 		</p:dataTable>
-		
-		<p:separator/>
-		
+					
 		</h:form>
 	
-	
-		<h:form id="formularioCadastroPedido">
+
+		<p:separator/>
+		
+		<h:form id="formcad">
 		<p:toolbar>
 			<f:facet name="left">
 			<h:outputText value="Carrinho de compras"/>
 			</f:facet>
 		</p:toolbar>
 		
-		<p:dataTable emptyMessage="Nenhum item adicionado." value="#{MBPedido.itens}"
-		var="produto"
+		<p:dataTable emptyMessage="Nenhum item adicionado."
+		value="#{MBPedido.itens}"
+		var="item"
 		rows="10"
 		paginator="true"
-		id="tabelaItens"
+		id="tbItens"
 		>
 		<p:column headerText="Nome">
 			<h:outputText value="#{item.produto.nome}"/>
@@ -88,14 +89,17 @@
 			<h:outputText value="#{item.produto.imposto}"/>
 		</p:column>
 		<p:column headerText="Quantidade">
-			<h:outputText value="#{item.produto.quantidade}"/>
+			<h:outputText value="#{item.quantidade}"/>
 		</p:column>
 		<p:column headerText="Categoria">
 			<h:outputText value="#{item.produto.categoria.descricao}"/>
 		</p:column>
 		<p:column headerText="Remover">
-			<p:button icon="ui-icon-circle-close">
-			</p:button>
+			<p:commandButton icon="ui-icon-circle-close"
+			actionListener="#{MBPedido.remover(item)}"
+			update=":formcad:tbItens"
+			>
+			</p:commandButton>
 		</p:column>
 		</p:dataTable>
 		</h:form>		

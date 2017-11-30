@@ -39,9 +39,9 @@ public class ItemPedido implements Serializable{
 	private Integer quantidade;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="produto", referencedColumnName="codigo", nullable=false)
+	@JoinColumn(name="codigoProduto", referencedColumnName="codigo", nullable=false)
 	private Produto produto;
-
+	
 	public Integer getNumero() {
 		return numero;
 	}
