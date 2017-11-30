@@ -89,7 +89,7 @@ public void salvar() {
 		ClienteDAO cdao = new ClienteDAO();
 		cdao.salvar(cliente);
 
-		cliente = new Cliente();
+		//cliente = new Cliente();
 		JSFUtil.adicionarMensagemSucesso("Cliente salvo com sucesso!");
 		
 	} catch (RuntimeException e) {
@@ -118,7 +118,7 @@ public void excluir() {
 		ClienteDAO cdao = new ClienteDAO();
 		cdao.excluir(cliente);
 
-		JSFUtil.adicionarMensagemSucesso("Fornecedor excluído com sucesso!");
+		JSFUtil.adicionarMensagemSucesso("Cliente excluído com sucesso!");
 	} catch (RuntimeException e) {
 		System.out.println("Excluir" + e);
 		JSFUtil.adicionarMensagemErro("Não foi possivel excluir o cliente!");

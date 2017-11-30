@@ -15,8 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "ItemPedido")
 @NamedQueries({
@@ -37,17 +35,12 @@ public class ItemPedido implements Serializable{
 	@Column(name="valorParcial", nullable=false, scale=2, precision=7)
 	private BigDecimal valorParcial;
 	
-	@NotEmpty(message = "Quantidade obrigatória")
 	@Column(name="quantidade", nullable=false)
 	private Integer quantidade;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="numeroPedido", referencedColumnName="numero", nullable=false)
-	private Pedido numeroPedido;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="codigoProduto", referencedColumnName="codigo", nullable=false)
-	private Produto codigoProduto;
+	@JoinColumn(name="produto", referencedColumnName="codigo", nullable=false)
+	private Produto produto;
 
 	public Integer getNumero() {
 		return numero;
@@ -73,25 +66,42 @@ public class ItemPedido implements Serializable{
 		this.quantidade = quantidade;
 	}
 
-	public Pedido getNumeroPedido() {
-		return numeroPedido;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setNumeroPedido(Pedido numeroPedido) {
-		this.numeroPedido = numeroPedido;
-	}
-
-	public Produto getCodigoProduto() {
-		return codigoProduto;
-	}
-
-	public void setCodigoProduto(Produto codigoProduto) {
-		this.codigoProduto = codigoProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	@Override
 	public String toString() {
 		return "ItemPedido [numero=" + numero + ", valorParcial=" + valorParcial + ", quantidade=" + quantidade
-				+ ", numeroPedido=" + numeroPedido + ", codigoProduto=" + codigoProduto + "]";
+				+ ", produto=" + produto + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemPedido other = (ItemPedido) obj;
+		if (numero == null) {
+			if (other.numero != null)
+				return false;
+		} else if (!numero.equals(other.numero))
+			return false;
+		return true;
 	}
 }

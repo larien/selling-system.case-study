@@ -9,8 +9,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "Cliente")
 @NamedQueries({
@@ -24,7 +22,6 @@ public class Cliente {
 	@Column(name="codigo")
 	private Long codigo;
 	
-	@NotEmpty(message = "Nome obrigatório")
 	@Column(name="nome", length=255, nullable=false)
 	private String nome;
 	
@@ -39,13 +36,13 @@ public class Cliente {
 	@Column(name="telefone", length=20, nullable=true)
 	private String telefone;
 	
-	@NotEmpty(message = "Status obrigatório")
 	@Column(name="status")
 	private int status;
 	
-	@NotEmpty(message = "Limite obrigatório")
 	@Column(name="limite")
-	private double limite;
+	private double limite;	
+	
+	// TODO - implementar ItemPedido
 
 	public Long getCodigo() {
 		return codigo;
@@ -100,5 +97,30 @@ public class Cliente {
 		return "Cliente [codigo=" + codigo + ", nome=" + nome + ", endereco=" + endereco + ", telefone=" + telefone
 				+ ", status=" + status + ", limite=" + limite + "]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
+
 }

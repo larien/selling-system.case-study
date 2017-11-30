@@ -6,7 +6,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import br.facens.Vendas.DAO.PedidoDAO;
+import br.facens.Vendas.DAO.ProdutoDAO;
+import br.facens.Vendas.devit.ItemPedido;
 import br.facens.Vendas.devit.Pedido;
+import br.facens.Vendas.devit.Produto;
 
 @ManagedBean(name = "MBPedido")
 @ViewScoped
@@ -15,14 +18,59 @@ public class PedidoBean {
 	private ArrayList<Pedido>pedidos;
 	private ArrayList<Pedido>pedidosFiltrados;
 	private String acao;
-	private Long numero;
 	
-	public Long getNumero() {
-		return numero;
+	private Produto produto;
+	private ArrayList<Produto>produtos;
+	private ArrayList<Produto>produtosFiltrados;
+	
+	private ArrayList<ItemPedido>itens;
+	private ArrayList<ItemPedido>itensFiltrados;
+		
+	public ArrayList<ItemPedido> getItens() {
+		if (itens == null) {
+			itens = new ArrayList<ItemPedido>();
+		}
+		return itens;
 	}
 
-	public void setNumero(Long numero) {
-		this.numero = numero;
+	public void setItens(ArrayList<ItemPedido> itens) {
+		this.itens = itens;
+	}
+
+	public ArrayList<ItemPedido> getItensFiltrados() {
+		return itensFiltrados;
+	}
+
+	public void setItensFiltrados(ArrayList<ItemPedido> itensFiltrados) {
+		this.itensFiltrados = itensFiltrados;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public ArrayList<Produto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(ArrayList<Produto> produtos) {
+		this.produtos = produtos;
+	}
+
+	public ArrayList<Produto> getProdutosFiltrados() {
+		return produtosFiltrados;
+	}
+
+	public void setProdutosFiltrados(ArrayList<Produto> produtosFiltrados) {
+		this.produtosFiltrados = produtosFiltrados;
+	}
+
+	public void setPedidosFiltrados(ArrayList<Pedido> pedidosFiltrados) {
+		this.pedidosFiltrados = pedidosFiltrados;
 	}
 
 	public String getAcao() {
@@ -68,23 +116,34 @@ public ArrayList<Pedido> getPedidos() {
 	}
 }
 	
+
+	public void carregarProdutos() {
+	try {
+		ProdutoDAO cdao = new ProdutoDAO();
+		produtos = (ArrayList<Produto>) cdao.listar();
+	}catch(RuntimeException e) {
+		JSFUtil.adicionarMensagemErro("ex.getMessage()");
+		e.printStackTrace();
+	}
+}
+	
 	public void carregarCadastro(){
 		try {
 			
-			acao = JSFUtil.getParam("foracao");
+			acao = JSFUtil.getParam("acao");
 			
-			
-			String valor = JSFUtil.getParam("numeroPedido");
+			String valor = JSFUtil.getParam("codigo");
 			if(valor != null) {
-				
+				Long codigo = Long.parseLong(valor);
 				
 				PedidoDAO cdao = new PedidoDAO();
 				
-				pedido = cdao.buscar(numero);
+				pedido = cdao.buscar(codigo);
 			} else {
 					pedido = new Pedido();
 				}
 		}catch(RuntimeException e) {
+			System.out.println("Carregar cadastro" + e);
 			JSFUtil.adicionarMensagemErro("ex.getMessage()");
 			e.printStackTrace();
 		}
@@ -98,12 +157,11 @@ public void salvar() {
 		PedidoDAO cdao = new PedidoDAO();
 		cdao.salvar(pedido);
 
-		//pedido = cdao.listar();
-		
-		pedido = new Pedido();
+		//pedido = new Pedido();
 		JSFUtil.adicionarMensagemSucesso("Pedido salvo com sucesso!");
 		
 	} catch (RuntimeException e) {
+		System.out.println("Salvar" + e);
 		JSFUtil.adicionarMensagemErro("ex.getMessage()");
 		e.printStackTrace();
 	}
@@ -117,6 +175,7 @@ public void editar() {
 		JSFUtil.adicionarMensagemSucesso("Pedido editado com sucesso!");
 		
 	} catch (RuntimeException e) {
+		System.out.println("Editar" + e);
 		JSFUtil.adicionarMensagemErro("ex.getMessage()");
 		e.printStackTrace();
 	}
@@ -127,11 +186,20 @@ public void excluir() {
 		PedidoDAO cdao = new PedidoDAO();
 		cdao.excluir(pedido);
 
-		JSFUtil.adicionarMensagemSucesso("Fornecedor excluído com sucesso!");
+		JSFUtil.adicionarMensagemSucesso("Pedido excluído com sucesso!");
 	} catch (RuntimeException e) {
+		System.out.println("Excluir" + e);
 		JSFUtil.adicionarMensagemErro("Não foi possivel excluir o pedido!");
 		e.printStackTrace();
 	}
+}
+
+public void adicionar(Produto produto) {
+	ItemPedido item = new ItemPedido();
+	item.setProduto(produto);
+	item.setQuantidade(1);
+	item.setValorParcial(produto.getPreco());
+	itens.add(item);
 }
 
 

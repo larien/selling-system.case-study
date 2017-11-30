@@ -8,16 +8,13 @@
 	template="/templates/template.xhtml"
 	>
 	
-		<ui:define name="metadata">
+	<ui:define name="metadata">
 		<f:metadata>
-		<f:viewParam name="foracao" value="#{MBProduto.acao}"/>
-		<f:viewParam name="forcod" value="#{MBProduto.codigo}"/>
 		<f:event listener="#{MBProduto.carregarCadastro}" type="preRenderView"/>
 		</f:metadata>
 		
 	</ui:define>
-	
-	
+
 	<ui:define name="conteudo">
 		<h:form id="formularioCadastroProduto">
 		<p:toolbar>
@@ -30,36 +27,45 @@
 		<p:outputLabel value="Código: "/>
 		<p:inputText maxlength="50" size="100" readonly="true" value="#{MBProduto.produto.codigo}"/>
 		<p:outputLabel value="Nome: " readonly="#{MBProduto.excluir}"/>
-		<p:inputText maxlength="100" size="100" value="#{MBProduto.produto.nome}">
-			<f:validateBean/>
-		</p:inputText>
-		<p:outputLabel value="Preço: "/>
-		<p:inputText maxlength="200" size="100">
-			<f:validateBean/>
-		</p:inputText>
-		<p:outputLabel value="Quantidade disponível: "/>
-		<p:inputText maxlength="20" size="100">
-			<f:validateBean/>
-		</p:inputText>
-		<p:outputLabel for="botaoMoeda" value="Moeda: " />
-        <p:selectOneButton id="botaoMoeda">
-        	<f:validateBean/>
-            <f:selectItem itemLabel="Real" itemValue="Real" />
-            <f:selectItem itemLabel="Dólar" itemValue="Dólar" />
-        </p:selectOneButton>
-		<p:outputLabel value="Imposto: "/>
-		<p:inputText maxlength="1" size="100">
-		<f:validateBean/>
-		</p:inputText>
-
-	
+		<p:inputText maxlength="100" size="100" value="#{MBProduto.produto.nome}"/>
+		<p:outputLabel value="Preço:  "/>
+		<p:inputText maxlength="20" size="100" value="#{MBProduto.produto.preco}"/>
+		<p:outputLabel value="Moeda: "/>
+		<p:selectOneButton value="#{MBProduto.produto.moeda}">
+			<f:selectItem itemLabel="Real" itemValue="1"/>
+			<f:selectItem itemLabel="Dólar" itemValue="2"/>
+		</p:selectOneButton>
+		<p:outputLabel value="Imposto:  "/>
+		<p:inputText maxlength="20" size="100" value="#{MBProduto.produto.imposto}"/>
+		<p:outputLabel value="Quantidade:  "/>
+		<p:inputText maxlength="1000" size="100" value="#{MBProduto.produto.quantidade}"/>
+		<p:outputLabel value="Categoria:  "/>
+		<p:selectOneMenu value="#{MBProduto.produto.categoria}"
+		converter = "categoriaConverter">
+		<f:selectItem itemValue = "" itemLabel="Selecione uma categoria"/>
+		<f:selectItems value="#{MBProduto.categorias}" var="categoria"
+		itemValue="#{categoria}" itemLabel="#{categoria.descricao}"/>
+		</p:selectOneMenu>
+		
 		</h:panelGrid>
 		<h:panelGrid columns="5">
 		<p:button icon="ui-icon-arrowreturnthick-1-w" outcome="/pages/produtoPesquisa.xhtml"/>
 		<p:button icon="ui-icon-plus" outcome="/pages/produtoCadastro.xhtml" actionListener="#{MBProduto.novo}" update=":formularioCadastroProduto:painelCadastroProduto" rendered="#{MBProduto.acao == 'Novo'}"/>
-		<p:commandButton icon="ui-icon-disk" actionListener="#{MBProduto.salvar}" update=":msgGlobal :formularioCadastroProduto:painelCadastroProduto"/>
-		<p:commandButton icon="ui-icon-pencil" actionListener="#{MBProduto.editar}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Editar'}"/>
-		<p:commandButton icon="ui-icon-trash" actionListener="#{MBProduto.excluir}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Excluir'}"/>
+		<p:commandButton icon="ui-icon-disk" actionListener="#{MBProduto.salvar}" update=":msgGlobal :formularioCadastroProduto:painelCadastroProduto" rendered="#{MBProduto.acao == 'Novo'}"/>
+		<p:commandButton icon="ui-icon-pencil" actionListener="#{MBProduto.editar}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Editar'}">
+		<p:confirm header="Alteração de produto" message="Tem certeza que gostaria de alterar os dados de um produto?" icon="ui-icon-alert" />
+		</p:commandButton>
+		 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
+		<p:commandButton icon="ui-icon-trash" actionListener="#{MBProduto.excluir}" update=":msgGlobal" rendered="#{MBProduto.acao == 'Excluir'}">
+			<p:confirm header="Exclusão de produto" message="Tem certeza que gostaria de excluir um produto?" icon="ui-icon-alert" />
+		</p:commandButton>
+		 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
 		</h:panelGrid>
 		</h:form>		
 	

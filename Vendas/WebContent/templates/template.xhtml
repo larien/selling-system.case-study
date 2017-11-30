@@ -34,17 +34,23 @@
 
 					<p:submenu label="Pedidos">
 						<p:menuitem value="Ver pedidos" outcome="/pages/pedidoPesquisa.xhtml"/>
-						<p:menuitem value="Adicionar pedidos" outcome="/pages/pedidoCadastro.xhtml"/>
+						<p:menuitem value="Adicionar pedidos" outcome="/pages/pedidoCadastro.xhtml">
+							<f:param name="acao" value ="Novo"/>
+						</p:menuitem>
 					</p:submenu>
 
 					<p:submenu label="Produtos">
 						<p:menuitem value="Ver produtos" outcome="/pages/produtoPesquisa.xhtml"/>
-						<p:menuitem value="Adicionar produtos" outcome="/pages/produtoCadastro.xhtml"/>
+						<p:menuitem value="Adicionar produtos" outcome="/pages/produtoCadastro.xhtml">
+							<f:param name="acao" value ="Novo"/>
+						</p:menuitem>
 					</p:submenu>
 
 					<p:submenu label="Clientes">
 						<p:menuitem value="Ver clientes" outcome="/pages/clientePesquisa.xhtml"/>
-						<p:menuitem value="Adicionar clientes" outcome="/pages/clienteCadastro.xhtml"/>
+						<p:menuitem value="Adicionar clientes" outcome="/pages/clienteCadastro.xhtml">
+							<f:param name="acao" value ="Novo"/>
+						</p:menuitem>
 					</p:submenu>
 
 					<p:submenu label="Ajuda">

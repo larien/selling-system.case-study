@@ -7,15 +7,14 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/template.xhtml"
 	>
-	
+
 	<ui:define name="metadata">
 		<f:metadata>
-		
-		<f:event listener="#{MBCliente.prepararPesquisa}" type="preRenderView"/>
+			<f:event listener="#{MBPedido.carregarProdutos}" type="preRenderView"/>
 		</f:metadata>
-		
 	</ui:define>
 	
+
 	<ui:define name="conteudo">
 		<h:form>
 		<p:toolbar>
@@ -23,13 +22,13 @@
 			<h:outputText value="Pedidos"/>
 			</f:facet>
 		</p:toolbar>
-		<h:panelGrid columns="5">
+		<h:panelGrid columns="6">
 		
-		<p:outputLabel value="Nome: "/>
+		<p:outputLabel value="Número: "/>
 		<p:inputText maxlength="50" size="30"/>
-		<p:button icon="ui-icon-search"/>
+		<p:button icon="ui-icon-search" filterBy="#{pedido.numero}"/>
 		<p:button icon="ui-icon-plus" outcome="/pages/pedidoCadastro.xhtml">
-		<f:param name="foracao" value ="Novo"/>
+		<f:param name="acao" value ="Novo"/>
 		</p:button>
 		</h:panelGrid>
 		
@@ -40,25 +39,22 @@
 		paginator="true"
 		>
 		<p:column headerText="Número" filterBy="#{pedido.numero}" sortBy="#{pedido.numero}">
-			<h:outputText value="#{pedido.numero}"/>
+			<h:outputText value="#{pedido.numero}" />
 		</p:column>
 		<p:column headerText="Data">
 			<h:outputText value="#{pedido.data}"/>
 		</p:column>
-		<p:column headerText="Valor total">
+		<p:column headerText="Total">
 			<h:outputText value="#{pedido.valorTotal}"/>
-		</p:column>
-		<p:column headerText="Cliente">
-			<h:outputText value="#{cliente.codigo}"/>
 		</p:column>
 		<p:column headerText="Editar">
 			<p:button icon="ui-icon-pencil" outcome="/pages/pedidoCadastro.xhtml">
-				<f:param name="numeroPedido" value="#{pedido.numero}"/>
-				<f:param name="foracao" value ="Editar"/>
+				<f:param name="codigo" value="#{pedido.numero}"/>
+				<f:param name="acao" value ="Editar"/>
 			</p:button>
 			<p:button icon="ui-icon-trash" outcome="/pages/pedidoCadastro.xhtml">
-				<f:param name="numeroPedido" value="#{pedido.numero}"/>
-				<f:param name="foracao" value ="Excluir"/>
+				<f:param name="codigo" value="#{pedido.numero}"/>
+				<f:param name="acao" value ="Excluir"/>
 			</p:button>
 		</p:column>
 		</p:dataTable>

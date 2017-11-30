@@ -14,8 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "ProdutoMercadoInterno")
 @NamedQueries({
@@ -35,7 +33,6 @@ public class ProdutoMercadoInterno implements Serializable{
 	@Id
 	private Produto codigoProduto;
 	
-	@NotEmpty(message = "Incentivo obrigatório")
 	@Column(name="incentivo", nullable=false)
 	private boolean incentivo;
 

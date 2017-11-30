@@ -14,8 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "ProdutoExportacao")
 @NamedQueries({
@@ -35,7 +33,6 @@ public class ProdutoExportacao implements Serializable{
 	@Id
 	private Produto codigoProduto;
 	
-	@NotEmpty(message = "Destino obrigatório")
 	@Column(name="destino", length=255, nullable=false)
 	private String destino;
 	
@@ -43,25 +40,17 @@ public class ProdutoExportacao implements Serializable{
 		return codigoProduto;
 	}
 
-
-
 	public void setCodigoProduto(Produto codigoProduto) {
 		this.codigoProduto = codigoProduto;
 	}
-
-
 
 	public String getDestino() {
 		return destino;
 	}
 
-
-
 	public void setDestino(String destino) {
 		this.destino = destino;
 	}
-
-
 
 	@Override
 	public String toString() {

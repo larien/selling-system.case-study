@@ -7,15 +7,14 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/template.xhtml"
 	>
-	
+
 	<ui:define name="metadata">
 		<f:metadata>
-		
-		<f:event listener="#{MBProduto.prepararPesquisa}" type="preRenderView"/>
+			<f:event listener="#{MBProduto.prepararPesquisa}" type="preRenderView"/>
 		</f:metadata>
-		
 	</ui:define>
 	
+
 	<ui:define name="conteudo">
 		<h:form>
 		<p:toolbar>
@@ -29,7 +28,7 @@
 		<p:inputText maxlength="50" size="30"/>
 		<p:button icon="ui-icon-search"/>
 		<p:button icon="ui-icon-plus" outcome="/pages/produtoCadastro.xhtml">
-		<f:param name="foracao" value ="Novo"/>
+		<f:param name="acao" value ="Novo"/>
 		</p:button>
 		</h:panelGrid>
 		
@@ -58,15 +57,16 @@
 			<h:outputText value="#{produto.quantidade}"/>
 		</p:column>
 		<p:column headerText="Categoria">
+			<h:outputText value="#{produto.categoria.descricao}"/>
 		</p:column>
 		<p:column headerText="Editar">
 			<p:button icon="ui-icon-pencil" outcome="/pages/produtoCadastro.xhtml">
-				<f:param name="codigoProduto" value="#{produto.codigo}"/>
-				<f:param name="foracao" value ="Editar"/>
+				<f:param name="codigo" value="#{produto.codigo}"/>
+				<f:param name="acao" value ="Editar"/>
 			</p:button>
 			<p:button icon="ui-icon-trash" outcome="/pages/produtoCadastro.xhtml">
-				<f:param name="codigoProduto" value="#{produto.codigo}"/>
-				<f:param name="foracao" value ="Excluir"/>
+				<f:param name="codigo" value="#{produto.codigo}"/>
+				<f:param name="acao" value ="Excluir"/>
 			</p:button>
 		</p:column>
 		</p:dataTable>
@@ -75,4 +75,5 @@
 		</h:form>
 	
 	</ui:define>
+	
 	</ui:composition>

@@ -14,8 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
 @Table(name = "Produto")
 @NamedQueries({
@@ -29,23 +27,18 @@ public class Produto {
 	@Column(name="codigo")
 	private Long codigo;
 	
-	@NotEmpty(message = "Nome obrigatório")
 	@Column(name="nome", length=80, nullable=false)
 	private String nome;
 	
-	@NotEmpty(message = "Preço obrigatório")
 	@Column(name="preco", nullable=false, scale=2, precision=7)
 	private BigDecimal preco;
 	
-	@NotEmpty(message = "Moeda obrigatória")
 	@Column(name="moeda", nullable=false)
 	private Integer moeda;
 	
-	@NotEmpty(message = "Imposto obrigatório")
 	@Column(name="imposto", nullable=false)
 	private double imposto;
 	
-	@NotEmpty(message = "Quantidade obrigatória")
 	@Column(name="quantidade", nullable=false)
 	private Integer quantidade;
 	
@@ -114,4 +107,30 @@ public class Produto {
 		return "Produto [codigo=" + codigo + ", nome=" + nome + ", preco=" + preco + ", moeda=" + moeda + ", imposto="
 				+ imposto + ", quantidade=" + quantidade + ", categoria=" + categoria + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Produto other = (Produto) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
+	
 }

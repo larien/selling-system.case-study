@@ -13,18 +13,9 @@ import br.facens.Vendas.devit.Categoria;
 public class CategoriaBean {
 	private Categoria categoria;
 	private ArrayList<Categoria>categorias;
-	private ArrayList<Categoria>categoriasFiltrados;
+	private ArrayList<Categoria>categoriasFiltradas;
 	private String acao;
-	private Long codigo;
 	
-	public Long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Long codigo) {
-		this.codigo = codigo;
-	}
-
 	public String getAcao() {
 		return acao;
 	}
@@ -51,11 +42,11 @@ public ArrayList<Categoria> getCategorias() {
 	}
 
 	public ArrayList<Categoria> getCategoriasFiltrados() {
-		return categoriasFiltrados;
+		return categoriasFiltradas;
 	}
 
-	public void setListarFiltrados(ArrayList<Categoria> categoriasFiltrados) {
-		this.categoriasFiltrados = categoriasFiltrados;
+	public void setListarFiltrados(ArrayList<Categoria> categoriasFiltradas) {
+		this.categoriasFiltradas = categoriasFiltradas;
 	}
 
 	public void prepararPesquisa() {
@@ -71,12 +62,11 @@ public ArrayList<Categoria> getCategorias() {
 	public void carregarCadastro(){
 		try {
 			
-			acao = JSFUtil.getParam("foracao");
+			acao = JSFUtil.getParam("acao");
 			
-			
-			String valor = JSFUtil.getParam("codigoCategoria");
+			String valor = JSFUtil.getParam("codigo");
 			if(valor != null) {
-				
+				Long codigo = Long.parseLong(valor);
 				
 				CategoriaDAO cdao = new CategoriaDAO();
 				
@@ -85,6 +75,7 @@ public ArrayList<Categoria> getCategorias() {
 					categoria = new Categoria();
 				}
 		}catch(RuntimeException e) {
+			System.out.println("Carregar cadastro" + e);
 			JSFUtil.adicionarMensagemErro("ex.getMessage()");
 			e.printStackTrace();
 		}
@@ -98,12 +89,11 @@ public void salvar() {
 		CategoriaDAO cdao = new CategoriaDAO();
 		cdao.salvar(categoria);
 
-		//categoria = cdao.listar();
-		
-		categoria = new Categoria();
-		JSFUtil.adicionarMensagemSucesso("Categoria salvo com sucesso!");
+		//categoria = new Categoria();
+		JSFUtil.adicionarMensagemSucesso("Categoria salva com sucesso!");
 		
 	} catch (RuntimeException e) {
+		System.out.println("Salvar" + e);
 		JSFUtil.adicionarMensagemErro("ex.getMessage()");
 		e.printStackTrace();
 	}
@@ -114,9 +104,10 @@ public void editar() {
 		CategoriaDAO cdao = new CategoriaDAO();
 		cdao.editar(categoria);
 		
-		JSFUtil.adicionarMensagemSucesso("Categoria editado com sucesso!");
+		JSFUtil.adicionarMensagemSucesso("Categoria editada com sucesso!");
 		
 	} catch (RuntimeException e) {
+		System.out.println("Editar" + e);
 		JSFUtil.adicionarMensagemErro("ex.getMessage()");
 		e.printStackTrace();
 	}
@@ -127,9 +118,10 @@ public void excluir() {
 		CategoriaDAO cdao = new CategoriaDAO();
 		cdao.excluir(categoria);
 
-		JSFUtil.adicionarMensagemSucesso("Fornecedor excluído com sucesso!");
+		JSFUtil.adicionarMensagemSucesso("Categoria excluída com sucesso!");
 	} catch (RuntimeException e) {
-		JSFUtil.adicionarMensagemErro("Não foi possivel excluir o categoria!");
+		System.out.println("Excluir" + e);
+		JSFUtil.adicionarMensagemErro("Não foi possivel excluir a categoria!");
 		e.printStackTrace();
 	}
 }
