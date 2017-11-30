@@ -35,7 +35,7 @@
 		<p:dataTable emptyMessage="Nenhum cliente cadastrado." value="#{MBCliente.clientes}"
 		filteredValue="#{MBCliente.clientesFiltrados}"
 		var="cliente"
-		rows="10"
+		rows="5"
 		paginator="true"
 		>
 		<p:column headerText="Código">
@@ -55,8 +55,6 @@
 		</p:column>
 		<p:column headerText="Limite">
 			<h:outputText value="#{cliente.limite}"/>
-		</p:column>
-		<p:column headerText="Pedidos">
 		</p:column>
 		<p:column headerText="Editar">
 			<p:button icon="ui-icon-pencil" outcome="/pages/clienteCadastro.xhtml">

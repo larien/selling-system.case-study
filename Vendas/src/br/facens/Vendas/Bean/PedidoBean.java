@@ -1,7 +1,10 @@
 package br.facens.Vendas.Bean;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -16,17 +19,17 @@ import br.facens.Vendas.devit.Produto;
 @ViewScoped
 public class PedidoBean {
 	private Pedido pedido;
-	private ArrayList<Pedido>pedidos;
-	private ArrayList<Pedido>pedidosFiltrados;
+	private ArrayList<Pedido> pedidos;
+	private ArrayList<Pedido> pedidosFiltrados;
 	private String acao;
-	
+
 	private Produto produto;
-	private ArrayList<Produto>produtos;
-	private ArrayList<Produto>produtosFiltrados;
-	
-	private ArrayList<ItemPedido>itens;
-	private ArrayList<ItemPedido>itensFiltrados;
-		
+	private ArrayList<Produto> produtos;
+	private ArrayList<Produto> produtosFiltrados;
+
+	private ArrayList<ItemPedido> itens;
+	private ArrayList<ItemPedido> itensFiltrados;
+
 	public ArrayList<ItemPedido> getItens() {
 		if (itens == null) {
 			itens = new ArrayList<ItemPedido>();
@@ -77,21 +80,24 @@ public class PedidoBean {
 	public String getAcao() {
 		return acao;
 	}
-	
+
 	public void setAcao(String acao) {
 		this.acao = acao;
 	}
 
-public Pedido getPedido() {
-	
-	return pedido;
+	public Pedido getPedido() {
+		if (pedido == null) {
+			pedido = new Pedido();
+			pedido.setValorTotal(new BigDecimal("0.00"));
+		}
+		return pedido;
 	}
 
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
 
-public ArrayList<Pedido> getPedidos() {
+	public ArrayList<Pedido> getPedidos() {
 		return pedidos;
 	}
 
@@ -108,139 +114,153 @@ public ArrayList<Pedido> getPedidos() {
 	}
 
 	public void prepararPesquisa() {
-	try {
-		PedidoDAO cdao = new PedidoDAO();
-		pedidos = (ArrayList<Pedido>) cdao.listar();
-	}catch(RuntimeException e) {
-		JSFUtil.adicionarMensagemErro("ex.getMessage()");
-		e.printStackTrace();
+		try {
+			PedidoDAO cdao = new PedidoDAO();
+			pedidos = (ArrayList<Pedido>) cdao.listar();
+		} catch (RuntimeException e) {
+			JSFUtil.adicionarMensagemErro("ex.getMessage()");
+			e.printStackTrace();
+		}
 	}
-}
-	
 
 	public void carregarProdutos() {
-	try {
-		ProdutoDAO cdao = new ProdutoDAO();
-		produtos = (ArrayList<Produto>) cdao.listar();
-	}catch(RuntimeException e) {
-		JSFUtil.adicionarMensagemErro("ex.getMessage()");
-		e.printStackTrace();
-	}
-}
-	
-	public void carregarCadastro(){
 		try {
-			
+			ProdutoDAO cdao = new ProdutoDAO();
+			produtos = (ArrayList<Produto>) cdao.listar();
+		} catch (RuntimeException e) {
+			JSFUtil.adicionarMensagemErro("ex.getMessage()");
+			e.printStackTrace();
+		}
+	}
+
+	public void carregarCadastro() {
+		try {
+
 			acao = JSFUtil.getParam("acao");
-			
+
 			String valor = JSFUtil.getParam("codigo");
-			if(valor != null) {
+			if (valor != null) {
 				Long codigo = Long.parseLong(valor);
-				
+
 				PedidoDAO cdao = new PedidoDAO();
-				
+
 				pedido = cdao.buscar(codigo);
 			} else {
-					pedido = new Pedido();
-				}
-		}catch(RuntimeException e) {
+				pedido = new Pedido();
+			}
+		} catch (RuntimeException e) {
 			System.out.println("Carregar cadastro" + e);
 			JSFUtil.adicionarMensagemErro("ex.getMessage()");
 			e.printStackTrace();
 		}
 	}
+
 	public void novo() {
-	pedido = new Pedido();
-}
-	
-public void salvar() {
-	try {
-		PedidoDAO cdao = new PedidoDAO();
-		cdao.salvar(pedido);
-
-		//pedido = new Pedido();
-		JSFUtil.adicionarMensagemSucesso("Pedido salvo com sucesso!");
-		
-	} catch (RuntimeException e) {
-		System.out.println("Salvar" + e);
-		JSFUtil.adicionarMensagemErro("ex.getMessage()");
-		e.printStackTrace();
+		pedido = new Pedido();
 	}
-}
 
-public void editar() {
-	try {
-		PedidoDAO cdao = new PedidoDAO();
-		cdao.editar(pedido);
-		
-		JSFUtil.adicionarMensagemSucesso("Pedido editado com sucesso!");
-		
-	} catch (RuntimeException e) {
-		System.out.println("Editar" + e);
-		JSFUtil.adicionarMensagemErro("ex.getMessage()");
-		e.printStackTrace();
-	}
-}
+	public void salvar() {
+		try {
+			
+			PedidoDAO pdao = new PedidoDAO();
+			pdao.salvar(pedido);
+			
+			pedido = new Pedido();
+			pedido.setValorTotal(new BigDecimal("0.00"));
+			itens = new ArrayList<ItemPedido>();
+			
+			JSFUtil.adicionarMensagemSucesso("Pedido salvo com sucesso!");
 
-public void excluir() {
-	try {
-		PedidoDAO cdao = new PedidoDAO();
-		cdao.excluir(pedido);
-
-		JSFUtil.adicionarMensagemSucesso("Pedido excluído com sucesso!");
-	} catch (RuntimeException e) {
-		System.out.println("Excluir" + e);
-		JSFUtil.adicionarMensagemErro("Não foi possivel excluir o pedido!");
-		e.printStackTrace();
-	}
-}
-
-public void adicionar(Produto produto) {
-	
-	ItemPedido item = new ItemPedido();
-	item.setProduto(produto);	
-	
-	
-	int found = -1;
-	
-	for(int pos = 0; pos<itens.size() && found < 0;pos++) {
-		ItemPedido temp = itens.get(pos);
-		
-		if(temp.getProduto().equals(produto)) {
-			found = pos;
+		} catch (RuntimeException e) {
+			JSFUtil.adicionarMensagemErro("ex.getMessage()");
+			e.printStackTrace();
 		}
 	}
-	
-	if (found < 0) {
-	item.setQuantidade(1);
-	item.setValorParcial(produto.getPreco());
-	itens.add(item);
-	}else {
-		ItemPedido temp = itens.get(found);
-		item.setQuantidade(temp.getQuantidade() + 1);
-		item.setValorParcial(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
-		itens.set(found,  item);
-	}
-}
 
-public void remover(ItemPedido item) {
-	int found = -1;
-	
-	for(int pos = 0; pos<itens.size() && found < 0;pos++) {
-		ItemPedido temp = itens.get(pos);
-		
-		if(temp.getProduto().equals(item.getProduto())) {
-			found = pos;
-		}
-		
-		if (found > -1) {
-			item.setQuantidade(temp.getQuantidade() - 1);
-		}
-		
-		if (temp.getQuantidade() <= 0) {
-			itens.remove(found);
+	public void editar() {
+		try {
+			PedidoDAO cdao = new PedidoDAO();
+			cdao.editar(pedido);
+
+			JSFUtil.adicionarMensagemSucesso("Pedido editado com sucesso!");
+
+		} catch (RuntimeException e) {
+			System.out.println("Editar" + e);
+			JSFUtil.adicionarMensagemErro("ex.getMessage()");
+			e.printStackTrace();
 		}
 	}
-}
+
+	public void excluir() {
+		try {
+			PedidoDAO cdao = new PedidoDAO();
+			cdao.excluir(pedido);
+
+			JSFUtil.adicionarMensagemSucesso("Pedido excluído com sucesso!");
+		} catch (RuntimeException e) {
+			System.out.println("Excluir" + e);
+			JSFUtil.adicionarMensagemErro("Não foi possivel excluir o pedido!");
+			e.printStackTrace();
+		}
+	}
+
+	public void adicionar(Produto produto) {
+
+		ItemPedido item = new ItemPedido();
+		item.setProduto(produto);
+
+		int found = -1;
+
+		for (int pos = 0; pos < itens.size() && found < 0; pos++) {
+			ItemPedido temp = itens.get(pos);
+
+			if (temp.getProduto().equals(produto)) {
+				found = pos;
+			}
+		}
+
+		if (found < 0) {
+			item.setQuantidade(1);
+			item.setValorParcial(produto.getPreco());
+			itens.add(item);
+		} else {
+			ItemPedido temp = itens.get(found);
+			item.setQuantidade(temp.getQuantidade() + 1);
+			item.setValorParcial(produto.getPreco().multiply(new BigDecimal(item.getQuantidade())));
+			itens.set(found, item);
+		}
+
+		pedido.setValorTotal(pedido.getValorTotal().add(produto.getPreco()));
+	}
+
+	public void remover(ItemPedido item) {
+		int found = -1;
+
+		for (int pos = 0; pos < itens.size() && found < 0; pos++) {
+			ItemPedido temp = itens.get(pos);
+
+			if (temp.getProduto().equals(item.getProduto())) {
+				found = pos;
+			}
+
+			if (found > -1) {
+				itens.remove(found);
+				pedido.setValorTotal(pedido.getValorTotal().subtract(item.getValorParcial()));
+			}
+
+		}
+	}
+
+	public String getData() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		return dtf.format(LocalDateTime.now());
+	}
+
+	public void carregarDadosVenda() {
+		pedido.setData(new Date());
+
+	}
+	
+	
 
 }

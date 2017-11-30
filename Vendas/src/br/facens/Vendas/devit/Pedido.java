@@ -1,7 +1,6 @@
 package br.facens.Vendas.devit;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,7 +31,7 @@ public class Pedido {
 	private Long numero;
 	
 	@Temporal(value=TemporalType.TIMESTAMP)
-	@Column(name="data", nullable=false)
+	@Column(name="data", nullable=true)
 	private Date data;
 	
 	@Column(name="valorTotal", nullable=false, scale=2, precision=7)
@@ -54,8 +53,8 @@ public class Pedido {
 		return data;
 	}
 
-	public void setData(Timestamp data) {
-		this.data = data;
+	public void setData(Date date) {
+		this.data = date;
 	}
 
 	public BigDecimal getValorTotal() {

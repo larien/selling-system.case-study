@@ -52,7 +52,7 @@
 		<p:column headerText="Adicionar">
 			<p:commandButton icon="ui-icon-circle-plus"
 			actionListener="#{MBPedido.adicionar(produto)}"
-			update=":formcad:tbItens"
+			update=":formcad:tbItens :formcad:geraValorTotal"
 			/>
 		</p:column>
 		</p:dataTable>
@@ -97,13 +97,41 @@
 		<p:column headerText="Remover">
 			<p:commandButton icon="ui-icon-circle-close"
 			actionListener="#{MBPedido.remover(item)}"
-			update=":formcad:tbItens"
+			update=":formcad:tbItens  :formcad:geraValorTotal"
 			>
 			</p:commandButton>
 		</p:column>
 		</p:dataTable>
+		
+		<p:separator/>
+		
+		<h:panelGrid columns="1">
+			<h:outputText id="geraValorTotal" value="Total da compra: #{MBPedido.pedido.valorTotal}"/>
+			<p:commandButton value="Finalizar pedido"
+			oncomplete="PF('dlgFinPedido').show()"
+			upate=":dial"
+			/>
+		</h:panelGrid>
 		</h:form>		
 	
+		<p:dialog closable="true" draggable="true" modal="true"
+		resizable="false" header="Finalizar pedido"
+		widgetVar="dlgFinPedido"
+		appendTo="@(body)"
+		id="dial"
+		>
+			<h:form>
+				<h:panelGrid colums="2">
+					<h:panelGrid columns="2">
+					<p:commandButton icon="ui-icon-check" actionListener="#{MBPedido.salvar}"
+					update=":msgGlobal :formcad:tbItens"
+					onclick="PF('dlgFinPedido').hide()"
+					/>
+					<p:commandButton icon="ui-icon-close" onclick="PF('dlgFinPedido').hide()"/>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 	
 	</ui:composition>
